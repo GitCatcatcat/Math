@@ -133,12 +133,12 @@ $
 \Delta V_a \\
 \Delta V_b \\
 \Delta V_c
-\end{bmatrix} = \sqrt{2} \bigg( \Delta V_{rms} \cdot
+\end{bmatrix} = \sqrt{2} V_b \bigg(
 \begin{bmatrix}
 sin(\theta_0) \\
 sin(\theta_0 - \frac{2}{3} \pi) \\
 sin(\theta_0 + \frac{2}{3} \pi)
-\end{bmatrix} + V_{rms0} \cdot \Delta \theta \cdot
+\end{bmatrix} + \Delta \theta \cdot
 \begin{bmatrix}
 cos(\theta_0) \\
 cos(\theta_0 - \frac{2}{3} \pi) \\
@@ -181,12 +181,12 @@ $
 
 $
 \theta = \int \omega dt \\
-\Delta \dot{\theta} = K_p \Delta V_{g.q} + \frac{1}{T_i}\int \Delta V_{g.q} dt \\
+\dot{\Delta \theta} = K_p \Delta V_{q} + \frac{1}{T_i}\int \Delta V_{q} dt \\
 $
 
 $
-L \frac{d}{dt}\Delta I_{d} = \Delta V_{i.d} - \Delta V_{g.d} \\
-L \frac{d}{dt}\Delta I_{q} = \Delta V_{i.q} - \Delta V_{g.q}
+L \frac{d}{dt}\Delta I_{d} = \Delta V_{i.d} - \Delta V_{d} \\
+L \frac{d}{dt}\Delta I_{q} = \Delta V_{i.q} - \Delta V_{q}
 $
 
 $
