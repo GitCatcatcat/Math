@@ -1,10 +1,20 @@
+입력  
+$P_r, Q_r$  
+
+<br>
+
+출력  
+$P_m, Q_m$  
+
+<br>
+
 계수  
-$S_b, V_b, f_b, L_i$
+$S_b, V_b, f_b, L_i$  
 
 <br>
 
 base 지정  
-$w_b = \frac{f_b}{2\pi} \\
+$\omega_b = \frac{f_b}{2\pi} \\
 V_{pk.b} = \frac{V_b}{\sqrt{6}} \\
 I_{pk.b} = \frac{S_b}{V_b \sqrt{6}} \\
 Z_b = \frac{{V_b}^2}{S_b} \\
@@ -20,15 +30,14 @@ $V_{g.abc} =
 V_a \\
 V_b \\
 V_c
-\end{bmatrix} = \sqrt{2} V_{rms} \cdot
+\end{bmatrix} = \sqrt{2} V_{b} \cdot
 \begin{bmatrix}
 sin(\theta) \\
 sin(\theta - \frac{2}{3} \pi) \\
 sin(\theta + \frac{2}{3} \pi)
 \end{bmatrix} \\$
 
-$V_{g.dq} = 
-\begin{bmatrix}
+$\begin{bmatrix}
 V_d \\
 V_q
 \end{bmatrix}=\frac{2}{3 } \cdot
@@ -42,8 +51,7 @@ V_b \\
 V_c
 \end{bmatrix} \\$
 
-$V_{g.dq.pu} = 
-\begin{bmatrix}
+$\begin{bmatrix}
 V_{d.pu} \\
 V_{q.pu}
 \end{bmatrix} = \frac{1}{V_{pk.b}}
@@ -55,23 +63,13 @@ V_{q}
 <br>
 
 $\theta = \int \omega dt \\
-\dot{\theta} = K_p V_q + \frac{1}{T_i}\int V_q dt + 60 \\
+\dot{\theta} = K_{p.pll} V_q + \frac{1}{T_{i.pll}}\int V_q dt + 60 \\
 \omega_{pu} = \frac{\omega}{\omega_b} \\$
 
 <br>
 
-$L \frac{d}{dt}I_{d} = V_{i.d} - V_{g.d} \\
-L \frac{d}{dt}I_{q} = V_{i.q} - V_{g.q} \\$
-
-$I_{g.dq.pu} = 
-\begin{bmatrix}
-I_{d.pu} \\
-I_{q.pu}
-\end{bmatrix} = \frac{1}{I_{pk.b}}
-\begin{bmatrix}
-I_{d} \\
-I_{q}
-\end{bmatrix} \\$
+$L_{pu} \frac{d}{dt}I_{d.pu} = \omega_b (V_{i.d.pu} - V_{d.pu}) \\
+L_{pu} \frac{d}{dt}I_{q.pu} = \omega_b (V_{i.q.pu} - V_{q.pu}) \\$
 
 <br>
 
@@ -117,30 +115,12 @@ I_{q.r} = K_{pq} Q_{er} + \frac{1}{T_{iq}}\int Q_{er} dt \\$
 <br>
 
 $I_{d.er} = I_{d.r.pu} - I_{d.pu} \\
-V_{i.d} = K_{p.id} I_{d.er} + \frac{1}{T_{i.id}}\int I_{d.er} dt
+V_{i.d.pu} = K_{p.id} I_{d.er} + \frac{1}{T_{i.id}}\int I_{d.er} dt
           + V_{d.pu} - I_{q.pu} \omega_{pu} L_{pu} \\$
 
 $I_{q.er} = I_{q.r.pu} - I_{q.pu} \\
-V_{i.q} = K_{p.iq} I_{q.er} + \frac{1}{T_{i.iq}}\int I_{q.er} dt
+V_{i.q.pu} = K_{p.iq} I_{q.er} + \frac{1}{T_{i.iq}}\int I_{q.er} dt
           + V_{q.pu} + I_{d.pu} \omega_{pu} L_{pu} \\$
-
-<br>
-
-$V_i=
-\begin{bmatrix}
-V_{i.a} \\
-V_{i.b} \\
-V_{i.c}
-\end{bmatrix}=
-\begin{bmatrix}
-cos(\theta) & -sin(\theta) \\
-cos(\theta+\frac{2}{3}\pi) & -sin(\theta+\frac{2}{3}\pi) \\
- cos(\theta-\frac{2}{3}\pi) & -sin(\theta-\frac{2}{3}\pi)
-\end{bmatrix}\cdot
-\begin{bmatrix}
-V_{i.d} \\
-V_{i.q}
-\end{bmatrix} \\$
 
 <br>
 <br>
