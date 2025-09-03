@@ -9,75 +9,83 @@ $P_m, Q_m$
 <br>
 
 계수  
-$S_b, V_b, f_b, L_i$  
+$S_{base}, V_{base}, f_{base}, L_i, R_i$  
 
 <br>
 
 base 지정  
-$\omega_b = \frac{f_b}{2\pi} \\
-V_{pk.b} = \frac{V_b}{\sqrt{6}} \\
-I_{pk.b} = \frac{S_b}{V_b \sqrt{6}} \\
-Z_b = \frac{{V_b}^2}{S_b} \\
-L_b = \frac{Z_b}{\omega_b} \\
-C_b = Z_b \cdot \omega_b \\
-L_{pu} = \frac{L_i}{L_b} \\$
+$I_{base} = \frac{V_{base}}{S_{base}} \\
+\omega_{base} = \frac{f_{base}}{2\pi} \\
+V_{pk.b} = \frac{V_{base}}{\sqrt{6}} \\
+I_{pk.b} = \frac{S_{base}}{V_{base} \sqrt{6}} \\
+Z_{base} = \frac{{V_{base}}^2}{S_b} \\
+L_{base} = \frac{Z_{base}}{\omega_{base}} \\
+C_{base} = Z_{base} \cdot \omega_{base} \\
+L_{pu} = \frac{L_i}{L_{base}} \\
+R_{pu} = \frac{R_i}{Z_{base}}$
 
 <br>
 
-제어 식  
+제어 식
+
+$T(\theta) = \begin{bmatrix}
+sin(\theta) & sin(\theta-\frac{2}{3}\pi) & sin(\theta+\frac{2}{3}\pi) \\
+-cos(\theta) & -cos(\theta-\frac{2}{3}\pi) & -cos(\theta+\frac{2}{3}\pi)
+\end{bmatrix}$
+
 $V_{g.abc} = 
 \begin{bmatrix}
 V_a \\
 V_b \\
 V_c
-\end{bmatrix} = \sqrt{2} V_{b} \cdot
+\end{bmatrix} = \sqrt{2} \ V_{rms} \cdot
 \begin{bmatrix}
-sin(\theta) \\
-sin(\theta - \frac{2}{3} \pi) \\
-sin(\theta + \frac{2}{3} \pi)
+sin(\delta) \\
+sin(\delta - \frac{2}{3} \pi) \\
+sin(\delta + \frac{2}{3} \pi)
 \end{bmatrix} \\$
 
-$\begin{bmatrix}
+$V_{dq} = 
+\begin{bmatrix}
 V_d \\
 V_q
-\end{bmatrix}=\frac{2}{3 } \cdot
-\begin{bmatrix}
-cos(\theta) & cos(\theta+\frac{2}{3}\pi) & cos(\theta-\frac{2}{3}\pi) \\
--sin(\theta) & -sin(\theta+\frac{2}{3}\pi) & -sin(\theta-\frac{2}{3}\pi)
-\end{bmatrix} \cdot
-\begin{bmatrix}
-V_a \\
-V_b \\
-V_c
-\end{bmatrix} \\$
+\end{bmatrix}=\frac{2}{3} \cdot
+T(\theta) \cdot V_{g.abc}\\$
 
-$\begin{bmatrix}
-V_{d.pu} \\
-V_{q.pu}
-\end{bmatrix} = \frac{1}{V_{pk.b}}
-\begin{bmatrix}
-V_{d} \\
-V_{q}
-\end{bmatrix} \\$
+$V_{dq.pu} = \frac{V_{dq}}{V_{base}} \\ $
 
 <br>
 
 $\theta = \int \omega dt \\
-\dot{\theta} = K_{p.pll} V_q + \frac{1}{T_{i.pll}}\int V_q dt + 60 \\
+\dot{\theta} = \omega = K_{p.pll} (-V_q) + \frac{1}{T_{i.pll}}\int (-V_q) dt + 2\pi\omega_{base} \\
 \omega_{pu} = \frac{\omega}{\omega_b} \\$
 
 <br>
 
-$\dot {\begin{bmatrix}
-I_{d.pu} \\ I_{q.pu}
-\end{bmatrix}} = \frac{\omega_b}{L_{pu}} \bigg(
+$J = 
 \begin{bmatrix}
-V_{i.d.pu} \\ V_{i.q.pu}
-\end{bmatrix} - 
-\begin{bmatrix}
-V_{d.pu} \\ V_{q.pu}
-\end{bmatrix} \bigg)
+0 & -1 \\
+1 & 0
+\end{bmatrix}, \quad
+\frac{d}{dt}T(\theta) = \omega \ J \cdot T(\theta)$
+
+$L_i \frac{d}{dt} I_{abc} = V_{i.abc} - V_{g.abc} - R_i \ I_{bac} \\
+I_{dq} = \frac{2}{3} \ T(\theta) \cdot I_{abc}, \quad
+V_{dq} = \frac{2}{3} \ T(\theta) \cdot V_{g.abc} \\
+\frac{d}{dt} I_{dq} = \frac{2}{3} \ \frac{d}{dt} T(\theta) \cdot I_{abc} +  \frac{2}{3} \ T(\theta) \cdot \frac{d}{dt} I_{abc} \\
+\qquad \quad \ = \omega \ J \cdot \frac{2}{3} \ T(\theta) \cdot I_{abc} + \frac{1}{L_i} \frac{2}{3} \ T(\theta) \cdot (V_{i.abc} - V_{g.abc} - R_i \ I_{bac})\\
+\qquad \quad \ = \omega \ J \cdot I_{dq} + \frac{1}{L_i} (V_{i.dq} - V_{dq} - R_i \ I_{dq})
 $
+
+$\dot {\begin{bmatrix}
+I_{d} \\ I_{q}
+\end{bmatrix}} = 
+\begin{bmatrix}
+-\omega I_q + \frac{1}{L_i} (V_{i.d} - V_d - R_i I_d) \\ \omega I_d + \frac{1}{L_i} (V_{i.q} - V_q - R_i I_q)
+\end{bmatrix}
+$
+
+$\dot I_{dq.pu} = \frac{1}{I_{base}} \dot{I_{dq}}$
 
 <br>
 
@@ -94,14 +102,14 @@ I_d \\ I_q
 
 $\begin{bmatrix}
 P_{m.pu} \\ Q_{m.pu}
-\end{bmatrix} = \frac{1}{S_b}
+\end{bmatrix} = \frac{1}{S_{base}}
 \begin{bmatrix}
 P_{m} \\ Q_{m}
 \end{bmatrix} \\$
 
 $\begin{bmatrix}
 P_{r.pu} \\ Q_{r.pu}
-\end{bmatrix} = \frac{1}{S_b}
+\end{bmatrix} = \frac{1}{S_{base}}
 \begin{bmatrix}
 P_{r} \\ Q_{r}
 \end{bmatrix} \\$
@@ -127,108 +135,100 @@ V_{i.q.pu} = K_{p.iq} I_{q.er} + \frac{1}{T_{i.iq}}\int I_{q.er} dt
 <br>
 <br>
 
-선형화
+선형화 과정
 
-$\Delta V_{g.abc} = 
-\begin{bmatrix}
-\Delta V_a \\
-\Delta V_b \\
-\Delta V_c
-\end{bmatrix} = \sqrt{2} V_b \bigg(
-\begin{bmatrix}
-sin(\theta_0) \\
-sin(\theta_0 - \frac{2}{3} \pi) \\
-sin(\theta_0 + \frac{2}{3} \pi)
-\end{bmatrix} + \Delta \theta \cdot
-\begin{bmatrix}
-cos(\theta_0) \\
-cos(\theta_0 - \frac{2}{3} \pi) \\
-cos(\theta_0 + \frac{2}{3} \pi)
-\end{bmatrix} \bigg)$
-
-$\Delta V_{g.dq} = 
-\begin{bmatrix}
-\Delta V_d \\
-\Delta V_q
-\end{bmatrix} = \frac{2}{3} \biggr(
-\begin{bmatrix}
-cos(\theta_0) & cos(\theta_0+\frac{2}{3}\pi) & cos(\theta_0-\frac{2}{3}\pi) \\
--sin(\theta_0) & -sin(\theta_0+\frac{2}{3}\pi) & -sin(\theta_0-\frac{2}{3}\pi)
-\end{bmatrix} \cdot
-\begin{bmatrix}
-\Delta V_a \\
-\Delta V_b \\
-\Delta V_c 
-\end{bmatrix} + \Delta \theta \cdot
-\begin{bmatrix}
--sin(\theta_0) & -sin(\theta_0+\frac{2}{3}\pi) & -sin(\theta_0-\frac{2}{3}\pi) \\
--cos(\theta_0) & -cos(\theta_0+\frac{2}{3}\pi) & -cos(\theta_0-\frac{2}{3}\pi)
-\end{bmatrix} \cdot
-\begin{bmatrix}
-\Delta V_a \\
-\Delta V_b \\
-\Delta V_c 
-\end{bmatrix} \biggr)$
-
-$\Delta V_{g.dq.pu} = 
-\begin{bmatrix}
-\Delta V_{d.pu} \\
-\Delta V_{q.pu}
-\end{bmatrix} = \frac{1}{V_{pk.b}}
-\begin{bmatrix}
-\Delta V_d \\
-\Delta V_q
+$T(\theta) = \begin{bmatrix}
+sin(\theta) & sin(\theta-\frac{2}{3}\pi) & sin(\theta+\frac{2}{3}\pi) \\
+-cos(\theta) & -cos(\theta-\frac{2}{3}\pi) & -cos(\theta+\frac{2}{3}\pi)
 \end{bmatrix}$
 
+$V_{dq0} + \Delta V_{dq} = \frac{2}{3} \cdot
+T(\theta_0 + \Delta \theta) \cdot (V_{g.abc0} + \Delta V_{g.abc})\\$
+
+무한모선, $\Delta V_{g.abc} = 0$  
+$V_{dq0} + \Delta V_{dq} = T(\theta_0 + \Delta \theta) \cdot V_{g.abc0}\\
+\qquad \qquad \quad \ =
+\begin{bmatrix}
+V_{base} cos(\Delta \theta) \\ -V_{base} sin(\Delta \theta)
+\end{bmatrix} \approx 
+\begin{bmatrix}
+V_{base} \\ -V_{base} \Delta \theta
+\end{bmatrix}$
+
+$\Delta V_{dq} =
+\begin{bmatrix}
+V_{base} - V_{d0} \\ -V_{base} \Delta \theta - V_{q0}
+\end{bmatrix} = 
+\begin{bmatrix}
+0 \\ -V_{base} \Delta \theta
+\end{bmatrix}$
+
+$\Delta V_{dq.pu} = \frac{\Delta V_{dq}}{V_{base}} \\ $
+
 <br>
+
+$\theta = \int \omega dt \\
+\omega_0 + \Delta \omega = -K_{p.pll} (V_{q0}+ \Delta V_q) - \frac{1}{T_{i.pll}}\int (V_{q0}+ \Delta V_q) dt + 2\pi\omega_{base} \\
+\dot{\Delta \theta} = \Delta \omega = -K_{p.pll} \Delta V_q - \frac{1}{T_{i.pll}}\int \Delta V_q dt \\
+\Delta \omega_{pu} = \frac{\Delta \omega}{\omega_{base}} \\$
+
+<br>
+
+$\dot {\begin{bmatrix}
+I_{d0} + \Delta I_{d} \\ I_{q0} + \Delta I_{q}
+\end{bmatrix}} = 
+\begin{bmatrix}
+-(\omega_0 + \Delta \omega) (I_{q0}+\Delta I_q) + \frac{1}{L_i} [(V_{i.d0} + \Delta V_{i.d}) - (V_{d0} + \Delta V_{d}) - R_i (I_{d0} + \Delta I_{d})] \\
+(\omega_0 + \Delta \omega) (I_{d0}+\Delta I_d) + \frac{1}{L_i} [(V_{i.q0} + \Delta V_{i.q}) - (V_{q0} + \Delta V_{q}) - R_i (I_{q0} + \Delta I_{q})]
+\end{bmatrix} \\
+\dot {\begin{bmatrix}
+\Delta I_{d} \\ \Delta I_{q}
+\end{bmatrix}} = 
+\begin{bmatrix}
+-(\omega_0 \Delta I_q + I_{q0} \Delta \omega) + \frac{1}{L_i} (\Delta V_{i.d} - \Delta V_{d} - R_i \Delta I_{d}) \\
+\omega_0 \Delta I_d + I_{d0} \Delta \omega + \frac{1}{L_i} (\Delta V_{i.q} - \Delta V_{q} - R_i \Delta I_{q})
+\end{bmatrix}
+$
+
+$\dot I_{dq.pu} = \frac{1}{I_{base}} \dot{I_{dq}}$
+
+<br>
+
+$\begin{bmatrix}
+P_{m0}+\Delta P_m \\ Q_{m0}+\Delta Q_m
+\end{bmatrix} = \frac{2}{3} 
+\begin{bmatrix}
+V_{d0}+\Delta V_d & V_{q0}+\Delta V_q \\
+V_{q0}+\Delta V_q & -(V_{d0}+\Delta V_d)
+\end{bmatrix} \cdot 
+\begin{bmatrix}
+I_{d0}+\Delta I_d \\ I_{q0}+\Delta I_q
+\end{bmatrix} \\$
 
 $\begin{bmatrix}
 \Delta P_{m} \\ \Delta Q_{m}
 \end{bmatrix} = \frac{2}{3} 
 \begin{bmatrix}
-\Delta V_d & V_{d0} & \Delta V_q & V_{q0} \\
-\Delta V_q & V_{q0} & -\Delta V_d & -V_{d0}
+V_{d0}& \Delta V_d & V_{q0} & \Delta V_q \\
+V_{q0} & \Delta V_q & -V_{d0} & -\Delta V_d \\
 \end{bmatrix} \cdot 
 \begin{bmatrix}
-I_{d0} \\ \Delta I_d \\ I_{q0} \\ \Delta I_q
+\Delta I_d \\ I_{d0} \\ \Delta I_q \\ I_{q0}
 \end{bmatrix} \\$
 
 $\begin{bmatrix}
 \Delta P_{m.pu} \\ \Delta Q_{m.pu}
-\end{bmatrix} = \frac{1}{S_b}
+\end{bmatrix} = \frac{1}{S_{base}}
 \begin{bmatrix}
 \Delta P_{m} \\ \Delta Q_{m}
 \end{bmatrix} \\$
 
 $\begin{bmatrix}
 \Delta P_{r.pu} \\ \Delta Q_{r.pu}
-\end{bmatrix} = \frac{1}{S_b}
+\end{bmatrix} = \frac{1}{S_{base}}
 \begin{bmatrix}
 \Delta P_{r} \\ \Delta Q_{r}
 \end{bmatrix} \\$
-
-<br>
-
-$\Delta \theta = \int (\omega_0 + \Delta \omega) dt \\
-\dot{\Delta \theta} = K_{p.pll} \Delta V_{q}
-                    + \frac{1}{T_{i.pll}}\int \Delta V_{q} dt \\
-\Delta \omega_{pu} = \frac{\omega}{\omega_b}$
-
-$\theta = \int \omega dt \\
-\dot{\theta} = K_{p.pll} V_q + \frac{1}{T_{i.pll}}\int V_q dt + 60 \\
-\omega_{pu} = \frac{\omega}{\omega_b} \\$
-
-<br>
-
-$\dot {\begin{bmatrix}
-\Delta I_{d.pu} \\ \Delta I_{q.pu}
-\end{bmatrix}} = \frac{\omega_b}{L_{pu}} \bigg(
-\begin{bmatrix}
-\Delta V_{i.d.pu} \\ \Delta V_{i.q.pu}
-\end{bmatrix} - 
-\begin{bmatrix}
-\Delta V_{d.pu} \\ \Delta V_{q.pu}
-\end{bmatrix} \bigg)$
 
 <br>
 
@@ -238,12 +238,90 @@ $\Delta P_{er} = \Delta P_{r.pu} - \Delta P_{m.pu} \\
 $\Delta Q_{er} = \Delta Q_{r.pu} - \Delta Q_{m.pu} \\
 \Delta I_{q.r.pu} = K_p \Delta Q_{er} + \frac{1}{T_i}\int \Delta Q_{er} dt \\$
 
-$\Delta V_{i.d.pu} = K_p (\Delta I_{d.r.pu} - \Delta I_{d.pu})
-                + \frac{1}{T_i}\int (\Delta I_{d.r.pu} - \Delta I_{d.pu}) dt
-                - \Delta I_{q.pu} \cdot \omega_{pu} \cdot L_{pu} \\
-\Delta V_{i.q.pu} = K_p (\Delta I_{q.r.pu} - \Delta I_{q.pu})
-                 + \frac{1}{T_i}\int (\Delta I_{q.r.pu} - \Delta I_{q.pu}) dt
-                 + \Delta I_{d.pu} \cdot \omega_{pu} \cdot L_{pu} \\$
+$\Delta I_{d.er} = \Delta I_{d.r.pu} - \Delta I_{d.pu} \\
+\Delta V_{i.d.pu} = K_p \Delta I_{d.er} + \frac{1}{T_i}\int \Delta I_{d.er} dt
+                 + \Delta V_{d.pu}
+                - L_{pu}\ (I_{q.pu0} \Delta \omega_{pu} + \omega_{pu0} \Delta I_{q.pu}) \\$
+
+$\Delta I_{q.er} = \Delta I_{q.r.pu} - \Delta I_{q.pu} \\
+\Delta V_{i.q.pu} = K_p \Delta I_{q.er} + \frac{1}{T_i}\int \Delta I_{q.er} dt
+                 + \Delta V_{q.pu}
+                 + L_{pu} \ (I_{d.pu0} \Delta \omega_{pu} + \omega_{pu0} \Delta I_{d.pu}) \\$
+
+<br>
+<br>
+
+선형화
+
+$\Delta V_{dq} = 
+\begin{bmatrix}
+0 \\ -V_{base} \Delta \theta
+\end{bmatrix}$
+
+$\Delta V_{dq.pu} = \frac{\Delta V_{dq}}{V_{base}} \\ $
+
+<br>
+
+$\dot{\Delta \theta} = \Delta \omega = -K_{p.pll} \Delta V_q - \frac{1}{T_{i.pll}}\int \Delta V_q dt \\
+\Delta \omega_{pu} = \frac{\Delta \omega}{\omega_{base}} \\$
+
+<br>
+
+$\dot {\begin{bmatrix}
+\Delta I_{d} \\ \Delta I_{q}
+\end{bmatrix}} = 
+\begin{bmatrix}
+-(\omega_0 \Delta I_q + I_{q0} \Delta \omega) + \frac{1}{L_i} (\Delta V_{i.d} - \Delta V_{d} - R_i \Delta I_{d}) \\
+\omega_0 \Delta I_d + I_{d0} \Delta \omega + \frac{1}{L_i} (\Delta V_{i.q} - \Delta V_{q} - R_i \Delta I_{q})
+\end{bmatrix}
+$
+
+$\dot I_{dq.pu} = \frac{1}{I_{base}} \dot{I_{dq}}$
+
+<br>
+
+$\begin{bmatrix}
+\Delta P_{m} \\ \Delta Q_{m}
+\end{bmatrix} = \frac{2}{3} 
+\begin{bmatrix}
+V_{d0}& \Delta V_d & V_{q0} & \Delta V_q \\
+V_{q0} & \Delta V_q & -V_{d0} & -\Delta V_d \\
+\end{bmatrix} \cdot 
+\begin{bmatrix}
+\Delta I_d \\ I_{d0} \\ \Delta I_q \\ I_{q0}
+\end{bmatrix} \\$
+
+$\begin{bmatrix}
+\Delta P_{m.pu} \\ \Delta Q_{m.pu}
+\end{bmatrix} = \frac{1}{S_{base}}
+\begin{bmatrix}
+\Delta P_{m} \\ \Delta Q_{m}
+\end{bmatrix} \\$
+
+$\begin{bmatrix}
+\Delta P_{r.pu} \\ \Delta Q_{r.pu}
+\end{bmatrix} = \frac{1}{S_{base}}
+\begin{bmatrix}
+\Delta P_{r} \\ \Delta Q_{r}
+\end{bmatrix} \\$
+
+<br>
+
+$\Delta P_{er} = \Delta P_{r.pu} - \Delta P_{m.pu} \\
+\Delta I_{d.r.pu} = K_p \Delta P_{er} + \frac{1}{T_i}\int \Delta P_{er} dt \\$
+
+$\Delta Q_{er} = \Delta Q_{r.pu} - \Delta Q_{m.pu} \\
+\Delta I_{q.r.pu} = K_p \Delta Q_{er} + \frac{1}{T_i}\int \Delta Q_{er} dt \\$
+
+$\Delta I_{d.er} = \Delta I_{d.r.pu} - \Delta I_{d.pu} \\
+\Delta V_{i.d.pu} = K_p \Delta I_{d.er} + \frac{1}{T_i}\int \Delta I_{d.er} dt
+                + \Delta V_{d.pu}
+                - L_{pu}\ (I_{q.pu0} \Delta \omega_{pu} + \omega_{pu0} \Delta I_{q.pu}) \\$
+
+$\Delta I_{q.er} = \Delta I_{q.r.pu} - \Delta I_{q.pu} \\
+\Delta V_{i.q.pu} = K_p \Delta I_{q.er} + \frac{1}{T_i}\int \Delta I_{q.er} dt
+                + \Delta V_{q.pu}
+                + L_{pu} \ (I_{d.pu0} \Delta \omega_{pu} + \omega_{pu0} \Delta I_{d.pu}) \\$
 
 <br>
 
