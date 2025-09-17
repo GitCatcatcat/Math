@@ -147,18 +147,18 @@ T(\theta_0 + \Delta \theta) \cdot (V_{g.abc0} + \Delta V_{g.abc})\\$
 
 무한모선, $\Delta V_{g.abc} = 0$  
 $V_{dq0} + \Delta V_{dq} = \frac{2}{3} \ T(\theta_0 + \Delta \theta) \cdot V_{g.abc0}\\
-\qquad \qquad \quad \ = \frac{2}{3}
+\qquad \qquad \quad \ =
 \begin{bmatrix}
 V_{pk.b} cos(\Delta \theta) \\ V_{pk.b} sin(\Delta \theta)
-\end{bmatrix} \approx \frac{2}{3}
+\end{bmatrix} \approx
 \begin{bmatrix}
 V_{pk.b} \\ V_{pk.b} \Delta \theta
 \end{bmatrix}$
 
-$\Delta V_{dq} = \frac{2}{3}
+$\Delta V_{dq} =
 \begin{bmatrix}
 V_{pk.b} \\ V_{pk.b} \Delta \theta
-\end{bmatrix} -V_{dq0} = \frac{2}{3}
+\end{bmatrix} -V_{dq0} =
 \begin{bmatrix}
 0 \\ V_{pk.b} \Delta \theta
 \end{bmatrix}$
@@ -253,7 +253,7 @@ $\Delta I_{q.er} = \Delta I_{q.r.pu} - \Delta I_{q.pu} \\
 
 선형화
 
-$\Delta V_{dq} = \frac{2}{3}
+$\Delta V_{dq} =
 \begin{bmatrix}
 0 \\ V_{pk.b} \Delta \theta
 \end{bmatrix}$
