@@ -94,17 +94,17 @@ P_{r} \\ Q_{r}
 
 Power Control (RPC)  
 $Q_{er} = Q_{r.pu} - Q_{m.pu} \\
-V_{d.r.pu} = K_{p.q} Q_{er} + \frac{1}{T_{i.q}}\int Q_{er} dt \\$
+V_{d.r.pu} = K_{p} Q_{er} + \frac{1}{T_{i}}\int Q_{er} dt \\$
 
 <br>
 
 Voltage Control  
 $V_{d.er} = V_{d.r.pu} - V_{d.pu} \\
-I_{d.r.pu} = K_{p.id} V_{d.er} + \frac{1}{T_{i.id}}\int V_{d.er} dt
+I_{d.r.pu} = K_{p} V_{d.er} + \frac{1}{T_{i}}\int V_{d.er} dt
           + I_{d.pu}FF - V_{q.pu} \omega_{pu} C_{pu}(=0) \\$
 
 $V_{q.er} = V_{q.r.pu}(=0) - V_{q.pu} \\
-I_{q.r.pu} = K_{p.iq} V_{q.er} + \frac{1}{T_{i.iq}}\int V_{q.er} dt
+I_{q.r.pu} = K_{p} V_{q.er} + \frac{1}{T_{i}}\int V_{q.er} dt
           + I_{q.pu}FF + V_{d.pu} \omega_{pu} C_{pu}(=0) \\$
 
 $FF = Feed Forward$, 여기서는 0으로 간주
@@ -113,11 +113,11 @@ $FF = Feed Forward$, 여기서는 0으로 간주
 
 Current Control  
 $I_{d.er} = I_{d.r.pu} - I_{d.pu} \\
-V_{i.d.pu} = K_{p.id} I_{d.er} + \frac{1}{T_{i.id}}\int I_{d.er} dt
+V_{i.d.pu} = K_{p} I_{d.er} + \frac{1}{T_{i}}\int I_{d.er} dt
           + V_{d.pu} - I_{q.pu} \omega_{pu} L_{pu} \\$
 
 $I_{q.er} = I_{q.r.pu} - I_{q.pu} \\
-V_{i.q.pu} = K_{p.iq} I_{q.er} + \frac{1}{T_{i.iq}}\int I_{q.er} dt
+V_{i.q.pu} = K_{p} I_{q.er} + \frac{1}{T_{i}}\int I_{q.er} dt
           + V_{q.pu} + I_{d.pu} \omega_{pu} L_{pu} \\$
 
 <br>
