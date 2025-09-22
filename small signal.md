@@ -28,6 +28,7 @@ R_{pu} = \frac{R_i}{Z_{base}}$
 
 제어 식
 
+DQ 변환  
 $T(\theta) = \begin{bmatrix}
 sin(\theta) & sin(\theta-\frac{2}{3}\pi) & sin(\theta+\frac{2}{3}\pi) \\
 -cos(\theta) & -cos(\theta-\frac{2}{3}\pi) & -cos(\theta+\frac{2}{3}\pi)
@@ -56,39 +57,14 @@ $V_{dq.pu} = \frac{V_{dq}}{V_{pk.b}} \\ $
 
 <br>
 
+PLL  
 $\dot{\theta} = \omega \\
 \omega = - (\ K_{p.pll} V_q + \frac{1}{T_{i.pll}}\int V_q dt \ ) + 2\pi\omega_{base} \\
 \omega_{pu} = \frac{\omega}{\omega_{base}} \\$
 
 <br>
 
-$J = 
-\begin{bmatrix}
-0 & -1 \\
-1 & 0
-\end{bmatrix}, \quad
-\frac{d}{dt}T(\theta) = \omega \ J \cdot T(\theta)$
-
-$L_i \frac{d}{dt} I_{abc} = V_{i.abc} - V_{g.abc} - R_i \ I_{abc} \\
-I_{dq} = \frac{2}{3} \ T(\theta) \cdot I_{abc}, \quad
-V_{dq} = \frac{2}{3} \ T(\theta) \cdot V_{g.abc} \\
-\frac{d}{dt} I_{dq} = \frac{2}{3} \ \frac{d}{dt} T(\theta) \cdot I_{abc} +  \frac{2}{3} \ T(\theta) \cdot \frac{d}{dt} I_{abc} \\
-\qquad \quad \ = \omega \ J \cdot \frac{2}{3} \ T(\theta) \cdot I_{abc} + \frac{1}{L_i} \frac{2}{3} \ T(\theta) \cdot (V_{i.abc} - V_{g.abc} - R_i \ I_{bac})\\
-\qquad \quad \ = \omega \ J \cdot I_{dq} + \frac{1}{L_i} (V_{i.dq} - V_{dq} - R_i \ I_{dq})
-$
-
-$\dot {\begin{bmatrix}
-I_{d} \\ I_{q}
-\end{bmatrix}} = 
-\begin{bmatrix}
--\omega I_q + \frac{1}{L_i} (V_{i.d} - V_d - R_i I_d) \\ \omega I_d + \frac{1}{L_i} (V_{i.q} - V_q - R_i I_q)
-\end{bmatrix}
-$
-
-$\dot I_{dq.pu} = \frac{1}{I_{pk.b}} \dot{I_{dq}}$
-
-<br>
-
+Power Calculation  
 $\begin{bmatrix}
 P_{m} \\ Q_{m}
 \end{bmatrix} =
@@ -116,6 +92,7 @@ P_{r} \\ Q_{r}
 
 <br>
 
+Power Control
 $P_{er} = P_{r.pu} - P_{m.pu} \\
 I_{d.r.pu} = K_{p.p} P_{er} + \frac{1}{T_{i.P}}\int P_{er} dt \\$
 
@@ -124,6 +101,7 @@ I_{q.r} = K_{p.q} Q_{er} + \frac{1}{T_{i.q}}\int Q_{er} dt \\$
 
 <br>
 
+Current Control  
 $I_{d.er} = I_{d.r.pu} - I_{d.pu} \\
 V_{i.d.pu} = K_{p.id} I_{d.er} + \frac{1}{T_{i.id}}\int I_{d.er} dt
           + V_{d.pu} - I_{q.pu} \omega_{pu} L_{pu} \\$
@@ -133,10 +111,39 @@ V_{i.q.pu} = K_{p.iq} I_{q.er} + \frac{1}{T_{i.iq}}\int I_{q.er} dt
           + V_{q.pu} + I_{d.pu} \omega_{pu} L_{pu} \\$
 
 <br>
+
+Current Dynamic (Filter)  
+$J = 
+\begin{bmatrix}
+0 & -1 \\
+1 & 0
+\end{bmatrix}, \quad
+\frac{d}{dt}T(\theta) = \omega \ J \cdot T(\theta)$
+
+$L_i \frac{d}{dt} I_{abc} = V_{i.abc} - V_{g.abc} - R_i \ I_{abc} \\
+I_{dq} = \frac{2}{3} \ T(\theta) \cdot I_{abc}, \quad
+V_{dq} = \frac{2}{3} \ T(\theta) \cdot V_{g.abc} \\
+\frac{d}{dt} I_{dq} = \frac{2}{3} \ \frac{d}{dt} T(\theta) \cdot I_{abc} +  \frac{2}{3} \ T(\theta) \cdot \frac{d}{dt} I_{abc} \\
+\qquad \quad \ = \omega \ J \cdot \frac{2}{3} \ T(\theta) \cdot I_{abc} + \frac{1}{L_i} \frac{2}{3} \ T(\theta) \cdot (V_{i.abc} - V_{g.abc} - R_i \ I_{bac})\\
+\qquad \quad \ = \omega \ J \cdot I_{dq} + \frac{1}{L_i} (V_{i.dq} - V_{dq} - R_i \ I_{dq})
+$
+
+$\dot {\begin{bmatrix}
+I_{d} \\ I_{q}
+\end{bmatrix}} = 
+\begin{bmatrix}
+-\omega I_q + \frac{1}{L_i} (V_{i.d} - V_d - R_i I_d) \\ \omega I_d + \frac{1}{L_i} (V_{i.q} - V_q - R_i I_q)
+\end{bmatrix}
+$
+
+$\dot I_{dq.pu} = \frac{1}{I_{pk.b}} \dot{I_{dq}}$
+
+<br>
 <br>
 
 선형화 과정
 
+DQ 변환  
 $T(\theta) = \begin{bmatrix}
 sin(\theta) & sin(\theta-\frac{2}{3}\pi) & sin(\theta+\frac{2}{3}\pi) \\
 -cos(\theta) & -cos(\theta-\frac{2}{3}\pi) & -cos(\theta+\frac{2}{3}\pi)
@@ -167,6 +174,7 @@ $\Delta V_{dq.pu} = \frac{\Delta V_{dq}}{V_{pk.b}} \\ $
 
 <br>
 
+PLL  
 $\dot{\Delta \theta} = \Delta \omega \\
 \omega_0 + \Delta \omega = -K_{p.pll} (V_{q0}+ \Delta V_q) - \frac{1}{T_{i.pll}}\int (V_{q0}+ \Delta V_q) dt + 2\pi\omega_{base} \\
 \Delta \omega = -K_{p.pll} \Delta V_q - \frac{1}{T_{i.pll}}\int \Delta V_q dt \\
@@ -174,26 +182,7 @@ $\dot{\Delta \theta} = \Delta \omega \\
 
 <br>
 
-$\dot {\begin{bmatrix}
-I_{d0} + \Delta I_{d} \\ I_{q0} + \Delta I_{q}
-\end{bmatrix}} = 
-\begin{bmatrix}
--(\omega_0 + \Delta \omega) (I_{q0}+\Delta I_q) + \frac{1}{L_i} [(V_{i.d0} + \Delta V_{i.d}) - (V_{d0} + \Delta V_{d}) - R_i (I_{d0} + \Delta I_{d})] \\
-(\omega_0 + \Delta \omega) (I_{d0}+\Delta I_d) + \frac{1}{L_i} [(V_{i.q0} + \Delta V_{i.q}) - (V_{q0} + \Delta V_{q}) - R_i (I_{q0} + \Delta I_{q})]
-\end{bmatrix} \\
-\dot {\begin{bmatrix}
-\Delta I_{d} \\ \Delta I_{q}
-\end{bmatrix}} = 
-\begin{bmatrix}
--(\omega_0 \Delta I_q + I_{q0} \Delta \omega) + \frac{1}{L_i} (\Delta V_{i.d} - \Delta V_{d} - R_i \Delta I_{d}) \\
-\omega_0 \Delta I_d + I_{d0} \Delta \omega + \frac{1}{L_i} (\Delta V_{i.q} - \Delta V_{q} - R_i \Delta I_{q})
-\end{bmatrix}
-$
-
-$\dot I_{dq.pu} = \frac{1}{I_{pk.b}} \dot{I_{dq}}$
-
-<br>
-
+Power Calculation  
 $\begin{bmatrix}
 P_{m0}+\Delta P_m \\ Q_{m0}+\Delta Q_m
 \end{bmatrix} = 
@@ -232,12 +221,14 @@ $\begin{bmatrix}
 
 <br>
 
+Power Control  
 $\Delta P_{er} = \Delta P_{r.pu} - \Delta P_{m.pu} \\
 \Delta I_{d.r.pu} = K_p \Delta P_{er} + \frac{1}{T_i}\int \Delta P_{er} dt \\$
 
 $\Delta Q_{er} = \Delta Q_{r.pu} - \Delta Q_{m.pu} \\
 \Delta I_{q.r.pu} = K_p \Delta Q_{er} + \frac{1}{T_i}\int \Delta Q_{er} dt \\$
 
+Current Control  
 $\Delta I_{d.er} = \Delta I_{d.r.pu} - \Delta I_{d.pu} \\
 \Delta V_{i.d.pu} = K_p \Delta I_{d.er} + \frac{1}{T_i}\int \Delta I_{d.er} dt
                  + \Delta V_{d.pu}
@@ -249,26 +240,16 @@ $\Delta I_{q.er} = \Delta I_{q.r.pu} - \Delta I_{q.pu} \\
                  + L_{pu} \ (I_{d.pu0} \Delta \omega_{pu} + \omega_{pu0} \Delta I_{d.pu}) \\$
 
 <br>
-<br>
 
-선형화
-
-$\Delta V_{dq} =
-\begin{bmatrix}
-0 \\ V_{pk.b} \Delta \theta
-\end{bmatrix}$
-
-$\Delta V_{dq.pu} = \frac{\Delta V_{dq}}{V_{pk.b}} \\ $
-
-<br>
-
-$\dot{\Delta \theta} = \Delta \omega \\
-\Delta \omega = -K_{p.pll} \Delta V_q - \frac{1}{T_{i.pll}}\int \Delta V_q dt \\
-\Delta \omega_{pu} = \frac{\Delta \omega}{\omega_{base}} \\$
-
-<br>
-
+Current Dynamic (Filter)  
 $\dot {\begin{bmatrix}
+I_{d0} + \Delta I_{d} \\ I_{q0} + \Delta I_{q}
+\end{bmatrix}} = 
+\begin{bmatrix}
+-(\omega_0 + \Delta \omega) (I_{q0}+\Delta I_q) + \frac{1}{L_i} [(V_{i.d0} + \Delta V_{i.d}) - (V_{d0} + \Delta V_{d}) - R_i (I_{d0} + \Delta I_{d})] \\
+(\omega_0 + \Delta \omega) (I_{d0}+\Delta I_d) + \frac{1}{L_i} [(V_{i.q0} + \Delta V_{i.q}) - (V_{q0} + \Delta V_{q}) - R_i (I_{q0} + \Delta I_{q})]
+\end{bmatrix} \\
+\dot {\begin{bmatrix}
 \Delta I_{d} \\ \Delta I_{q}
 \end{bmatrix}} = 
 \begin{bmatrix}
@@ -280,7 +261,29 @@ $
 $\dot I_{dq.pu} = \frac{1}{I_{pk.b}} \dot{I_{dq}}$
 
 <br>
+<br>
 
+선형화
+
+DQ 변환  
+$\Delta V_{dq} =
+\begin{bmatrix}
+0 \\ V_{pk.b} \Delta \theta
+\end{bmatrix}$
+
+$\Delta V_{dq.pu} = \frac{\Delta V_{dq}}{V_{pk.b}} \\ $
+
+<br>
+
+PLL  
+$\Delta \omega = - (K_{p.pll} \Delta V_q + \frac{1}{T_{i.pll}}\int \Delta V_q dt) \\
+\int \Delta V_q dt = \Delta \xi_{PLL} \\
+\dot{\Delta \theta} = \Delta \omega \\
+\Delta \omega_{pu} = \frac{\Delta \omega}{\omega_{base}} \\$
+
+<br>
+
+Power Calculation  
 $\begin{bmatrix}
 \Delta P_{m} \\ \Delta Q_{m}
 \end{bmatrix} =
@@ -308,32 +311,52 @@ $\begin{bmatrix}
 
 <br>
 
+Power Control  
 $\Delta P_{er} = \Delta P_{r.pu} - \Delta P_{m.pu} \\
-\Delta I_{d.r.pu} = K_p \Delta P_{er} + \frac{1}{T_i}\int \Delta P_{er} dt \\$
+\Delta I_{d.r.pu} = K_p \Delta P_{er} + \frac{1}{T_i}\int \Delta P_{er} dt \\
+\Delta \xi_P = \int \Delta P_{er} dt$
+
 
 $\Delta Q_{er} = \Delta Q_{r.pu} - \Delta Q_{m.pu} \\
-\Delta I_{q.r.pu} = K_p \Delta Q_{er} + \frac{1}{T_i}\int \Delta Q_{er} dt \\$
+\Delta I_{q.r.pu} = K_p \Delta Q_{er} + \frac{1}{T_i}\int \Delta Q_{er} dt \\
+\Delta \xi_Q = \int \Delta Q_{er} dt$
 
+Current Control  
 $\Delta I_{d.er} = \Delta I_{d.r.pu} - \Delta I_{d.pu} \\
 \Delta V_{i.d.pu} = K_p \Delta I_{d.er} + \frac{1}{T_i}\int \Delta I_{d.er} dt
                 + \Delta V_{d.pu}
-                - L_{pu}\ (I_{q.pu0} \Delta \omega_{pu} + \omega_{pu0} \Delta I_{q.pu}) \\$
+                - L_{pu}\ (I_{q.pu0} \Delta \omega_{pu} + \omega_{pu0} \Delta I_{q.pu}) \\
+\Delta \xi_{Id} = \int \Delta I_{d.er} dt$
 
 $\Delta I_{q.er} = \Delta I_{q.r.pu} - \Delta I_{q.pu} \\
 \Delta V_{i.q.pu} = K_p \Delta I_{q.er} + \frac{1}{T_i}\int \Delta I_{q.er} dt
                 + \Delta V_{q.pu}
-                + L_{pu} \ (I_{d.pu0} \Delta \omega_{pu} + \omega_{pu0} \Delta I_{d.pu}) \\$
+                + L_{pu} \ (I_{d.pu0} \Delta \omega_{pu} + \omega_{pu0} \Delta I_{d.pu}) \\
+\Delta \xi_{Iq} = \int \Delta I_{q.er} dt$
+
+<br>
+
+Current Dynamic (Filter)  
+$\dot {\begin{bmatrix}
+\Delta I_{d} \\ \Delta I_{q}
+\end{bmatrix}} = 
+\begin{bmatrix}
+-(\omega_0 \Delta I_q + I_{q0} \Delta \omega) + \frac{1}{L_i} (\Delta V_{i.d} - \Delta V_{d} - R_i \Delta I_{d}) \\
+\omega_0 \Delta I_d + I_{d0} \Delta \omega + \frac{1}{L_i} (\Delta V_{i.q} - \Delta V_{q} - R_i \Delta I_{q})
+\end{bmatrix}
+$
+
+$\dot I_{dq.pu} = \frac{1}{I_{pk.b}} \dot{I_{dq}}$
 
 <br>
 
 $\Delta x = \begin{bmatrix}
-\Delta I_d \\ \Delta I_q \\ \Delta \theta \\
-\int (\Delta I_{d,er}) dt \\ \int (\Delta I_{q,er}) dt \\
-\int (\Delta P_{er}) dt \\ \int (\Delta Q_{er}) dt \\
-\int (\Delta V_{g,q}) dt
+\Delta \theta \\ \Delta I_d \\ \Delta I_q \\ \Delta \xi_{PLL} \\
+\Delta \xi_{P} \\ \Delta \xi_{Q} \\
+\Delta \xi_{Id} \\ \Delta \xi_{Iq} \\
 \end{bmatrix}$
 
-$\Delta  = \begin{bmatrix}
+$\Delta u = \begin{bmatrix}
 \Delta P_r & \Delta Q_r \\
 \end{bmatrix}
 $
